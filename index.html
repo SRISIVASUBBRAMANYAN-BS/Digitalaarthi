@@ -1,30 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Digital Aarti - Samayapuram Mariamman Temple</title>
+    <title>டிஜிटல் ஆராதனை - சமயபுரம் மாரியம்மன் கோயில்</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
+            position: fixed;
+        }
+
+        @media (min-width: 1024px) {
+            body::before {
+                content: 'இந்த பயன்பாடு மொபைல் மற்றும் டேபிளெட்டுகளுக்காக மட்டுமே பயன்படுத்த பயன்படுகிறது';
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 24px;
+                color: #fff;
+                text-align: center;
+                width: 90%;
+                background: rgba(0,0,0,0.9);
+                padding: 40px;
+                border-radius: 20px;
+                z-index: 10000;
+            }
+            #mainContainer {
+                display: none;
+            }
         }
 
         /* Loading Screen */
@@ -34,48 +50,48 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #d4af37 0%, #f5d966 100%);
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            animation: fadeOut 0.5s ease-in-out 3s forwards;
+            z-index: 1000;
         }
 
-        .loading-content {
-            text-align: center;
-            animation: pulse 2s infinite;
+        .loading-screen.hidden {
+            display: none;
         }
 
         .temple-icon {
+            width: 100px;
+            height: 100px;
             font-size: 80px;
+            animation: bounce 1.5s infinite;
             margin-bottom: 20px;
-            animation: rotate 4s linear infinite;
         }
 
-        .loading-content h1 {
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .loading-text {
             color: #8b0000;
-            font-size: 32px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Arial', sans-serif;
         }
 
-        .loading-content p {
-            color: #333;
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-
-        .spinner {
-            border: 4px solid rgba(139, 0, 0, 0.3);
-            border-top: 4px solid #8b0000;
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #fff;
+            border-top: 4px solid #d4af37;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin-top: 20px;
         }
 
         @keyframes spin {
@@ -83,928 +99,1154 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes rotate {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(10deg) scale(1.05); }
-            100% { transform: rotate(0deg) scale(1); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes fadeOut {
-            to { opacity: 0; visibility: hidden; }
-        }
-
         /* Main Container */
-        .container {
+        #mainContainer {
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-in-out 3s forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #8b0000 0%, #c41e3a 100%);
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            border-bottom: 3px solid #d4af37;
-        }
-
-        .header-content {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+            padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        .header-ad {
-            width: 60px;
-            height: 60px;
-            background: #fff;
+        .header h1 {
+            color: #8b0000;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+        }
+
+        .ad-space-header {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
             border-radius: 8px;
-            overflow: hidden;
             display: flex;
-            align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            align-items: center;
+            font-size: 12px;
+            color: #8b0000;
+            overflow: hidden;
         }
 
-        .header-ad img {
+        .ad-space-header img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .header-title {
-            flex: 1;
-            text-align: center;
-        }
-
-        .header-title h1 {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #d4af37;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .header-title p {
-            font-size: 12px;
-            color: #f5d966;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: auto;
-            padding: 15px;
+            border-radius: 8px;
         }
 
         /* Camera Section */
-        .camera-section {
+        .camera-container {
+            flex: 1;
             position: relative;
-            width: 100%;
-            aspect-ratio: 9/16;
             background: #000;
-            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            display: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .camera-section.active {
-            display: block;
-        }
-
-        video {
+        #cameraFeed {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transform: scaleX(-1);
         }
 
-        .camera-overlay {
+        .instruction-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(255, 215, 0, 0.95);
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: #8b0000;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 10;
+            border: 2px solid #8b0000;
+        }
+
+        /* Green Box */
+        .green-box-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            max-width: 400px;
+            aspect-ratio: 3/4;
+            border: 3px solid #00ff00;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #00ff00, inset 0 0 20px rgba(0, 255, 0, 0.2);
+            background: transparent;
+            z-index: 5;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 20px #00ff00, inset 0 0 20px rgba(0, 255, 0, 0.2); }
+            50% { box-shadow: 0 0 30px #00ff00, inset 0 0 30px rgba(0, 255, 0, 0.3); }
+        }
+
+        /* Ritual Buttons at Bottom */
+        .ritual-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            padding: 0 15px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            z-index: 20;
+            flex-wrap: wrap;
+        }
+
+        .ritual-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #d4af37;
+            background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%);
+            color: #d4af37;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ritual-btn:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .ritual-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #4a4a4a 0%, #6a6a6a 100%);
+            border-color: #999;
+        }
+
+        .ritual-btn.completed::after {
+            content: '✓';
+            position: absolute;
+            font-size: 30px;
+            color: #00ff00;
+            animation: checkmark 0.6s ease;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Animation Canvas */
+        .animation-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
+            z-index: 15;
         }
 
-        .green-box {
-            width: 70%;
-            aspect-ratio: 1;
-            border: 3px solid #00ff00;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5), inset 0 0 20px rgba(0, 255, 0, 0.2);
-            background: rgba(0, 255, 0, 0.1);
-            animation: pulse-green 2s infinite;
-        }
-
-        @keyframes pulse-green {
-            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5), inset 0 0 20px rgba(0, 255, 0, 0.2); }
-            50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.8), inset 0 0 30px rgba(0, 255, 0, 0.4); }
-        }
-
-        .instruction-overlay {
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px;
+        /* Start Button */
+        .start-button-container {
             text-align: center;
-            border-bottom: 2px solid #d4af37;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border-top: 2px solid #d4af37;
         }
 
-        .instruction-overlay p {
-            font-size: 14px;
-            color: #d4af37;
+        #startBtn {
+            padding: 12px 40px;
+            font-size: 16px;
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+            color: #8b0000;
+            border: 2px solid #8b0000;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 90%;
+            max-width: 250px;
         }
 
-        /* Instructions Modal */
-        .modal {
+        #startBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        #startBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Sarvalangaram Section */
+        .sarvalangaram-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 3px solid #d4af37;
-            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
-        }
-
-        .modal-content h2 {
-            color: #d4af37;
-            margin-bottom: 20px;
-            font-size: 24px;
-            text-align: center;
-        }
-
-        .modal-content p {
-            color: #fff;
-            margin-bottom: 15px;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        .modal-content ul {
-            margin-left: 20px;
-            margin-bottom: 20px;
-        }
-
-        .modal-content li {
-            color: #d4af37;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        /* Buttons */
-        .button-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        button {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #d4af37 0%, #f5d966 100%);
-            color: #8b0000;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #8b0000 0%, #c41e3a 100%);
-            color: #fff;
-        }
-
-        .btn-secondary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 0, 0, 0.4);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Ritual Circle */
-        .rituals-section {
             display: none;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .rituals-section.active {
-            display: flex;
-        }
-
-        .ritual-instruction {
-            background: rgba(212, 175, 55, 0.2);
-            border: 2px solid #d4af37;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .ritual-instruction p {
-            color: #d4af37;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .rituals-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .ritual-circle {
-            aspect-ratio: 1;
-            border-radius: 50%;
-            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid #d4af37;
-            background: linear-gradient(135deg, #8b0000 0%, #c41e3a 100%);
-            position: relative;
-            overflow: hidden;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 500;
         }
 
-        .ritual-circle:hover:not(.completed):not(.disabled) {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-        }
-
-        .ritual-circle.completed {
-            background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
-            border-color: #00ff00;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-            animation: glow 1s ease-in-out;
-        }
-
-        .ritual-circle.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        @keyframes glow {
-            0% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(0, 255, 0, 0.8); }
-            100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
-        }
-
-        .ritual-name {
-            font-size: 12px;
-            text-align: center;
-            margin-top: 8px;
-            color: #fff;
-        }
-
-        .ritual-circle.completed .ritual-name {
-            color: #000;
-        }
-
-        .checkmark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
-            color: #fff;
-            display: none;
-        }
-
-        .ritual-circle.completed .checkmark {
-            display: block;
-        }
-
-        /* Sarvalangaram Section */
-        .sarvalangaram-section {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            text-align: center;
-        }
-
-        .sarvalangaram-section.active {
+        .sarvalangaram-screen.active {
             display: flex;
         }
 
-        .sarvalangaram-overlay {
+        .sarvalangaram-content {
             position: relative;
-            width: 100%;
-            aspect-ratio: 9/16;
+            width: 90%;
+            max-width: 500px;
+            aspect-ratio: 3/4;
             background: #000;
-            border-radius: 12px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+            border: 3px solid #d4af37;
         }
 
-        .sarvalangaram-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .sarvalangaram-text {
-            color: #d4af37;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        /* PDF Section */
-        .pdf-section {
-            display: none;
-            flex-direction: column;
-            gap: 15px;
-            flex: 1;
-        }
-
-        .pdf-section.active {
-            display: flex;
-        }
-
-        .pdf-container {
-            flex: 1;
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pdf-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Footer */
-        .footer {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-top: 3px solid #d4af37;
-            padding: 15px;
-            text-align: center;
-            font-size: 12px;
-            color: #d4af37;
-        }
-
-        .footer-ad {
-            width: 100%;
-            height: 80px;
-            background: #fff;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-ad img {
+        .sarvalangaram-content img,
+        .sarvalangaram-content video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        /* Mobile Responsiveness */
-        @media (max-width: 1024px) and (orientation: landscape) {
-            body {
-                height: 100vh;
-            }
-
-            .camera-section {
-                aspect-ratio: 16/9;
-            }
-
-            .rituals-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        .sarvalangaram-title {
+            color: #d4af37;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        @media (min-width: 1200px) {
-            .container {
-                display: none !important;
-            }
-
-            .desktop-only {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                z-index: 10000;
-            }
-
-            .desktop-only-content {
-                text-align: center;
-                color: #d4af37;
-            }
-
-            .desktop-only-content h1 {
-                font-size: 48px;
-                margin-bottom: 20px;
-            }
-
-            .desktop-only-content p {
-                font-size: 20px;
-                color: #fff;
-                margin-bottom: 30px;
-            }
+        /* PDF Viewer */
+        .pdf-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: none;
+            flex-direction: column;
+            z-index: 600;
         }
 
-        /* Animations */
+        .pdf-screen.active {
+            display: flex;
+        }
+
+        .pdf-header {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .pdf-header h2 {
+            color: #8b0000;
+            font-size: 18px;
+        }
+
+        .pdf-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .pdf-content {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            border: 2px solid #d4af37;
+        }
+
+        .pdf-content h3 {
+            color: #8b0000;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .pdf-content p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .completion-button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+            color: #8b0000;
+            border: 2px solid #8b0000;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .completion-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 100%);
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 11px;
+            color: #8b0000;
+            border-top: 2px solid #8b0000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .ad-space-footer {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            color: #8b0000;
+            overflow: hidden;
+        }
+
+        .ad-space-footer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Rituals Animation Styles */
+        .incense-smoke {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(200, 200, 200, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .lamp-container {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 16;
+        }
+
+        .lamp {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 30px 30px 0 0;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .lamp::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: #FFD700;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+            animation: flicker 0.3s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(0.95); }
+        }
+
+        .flower {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #FF69B4 0%, #FF1493 100%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .fan {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            top: 30%;
+        }
+
+        .fan-blade {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #8B4513 0%, #654321 100%);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fan-blade::before,
+        .fan-blade::after {
+            content: '';
+            position: absolute;
+            background: #654321;
+            border-radius: 50%;
+        }
+
+        .fan-blade::before {
+            width: 15px;
+            height: 35px;
+            top: 5px;
+        }
+
+        .fan-blade::after {
+            width: 15px;
+            height: 35px;
+            bottom: 5px;
+        }
+
+        .fan-left {
+            left: 20px;
+            animation: fan-left-spin 1s linear infinite;
+        }
+
+        .fan-right {
+            right: 20px;
+            animation: fan-right-spin 1s linear infinite;
+        }
+
+        @keyframes fan-left-spin {
+            0% { transform: rotateZ(0deg); }
+            100% { transform: rotateZ(360deg); }
+        }
+
+        @keyframes fan-right-spin {
+            0% { transform: rotateZ(0deg); }
+            100% { transform: rotateZ(-360deg); }
+        }
+
+        .flame {
+            position: absolute;
+            width: 30px;
+            height: 50px;
+            background: linear-gradient(to top, #FFD700, #FFA500, #FF6347);
+            border-radius: 50% 50% 50% 0;
+            animation: flame-flicker 0.4s infinite;
+            z-index: 16;
+        }
+
+        @keyframes flame-flicker {
+            0%, 100% { transform: scaleY(1) translateX(0); opacity: 1; }
+            25% { transform: scaleY(1.1) translateX(-2px); opacity: 0.95; }
+            50% { transform: scaleY(0.95) translateX(2px); opacity: 1; }
+            75% { transform: scaleY(1.05) translateX(-1px); opacity: 0.98; }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #d4af37;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 2px solid #d4af37;
+            z-index: 100;
+            animation: slideUp 0.3s ease, slideDown 0.3s ease 2.7s;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            max-width: 90%;
+        }
+
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
 
-        .slide-up {
-            animation: slideUp 0.3s ease-out;
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(20px); opacity: 0; }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4e4c1;
         }
     </style>
 </head>
 <body>
-    <!-- Desktop Only Message -->
-    <div id="desktopOnly" class="desktop-only" style="display: none;">
-        <div class="desktop-only-content">
-            <h1>🙏</h1>
-            <h1>Digital Aarti</h1>
-            <p>Please access this application on a mobile device or tablet</p>
-            <p style="font-size: 14px; margin-top: 20px; color: #999;">This application is optimized for touchscreen devices</p>
-        </div>
-    </div>
-
     <!-- Loading Screen -->
-    <div class="loading-screen">
-        <div class="loading-content">
-            <div class="temple-icon">🙏</div>
-            <h1>Digital Aarti</h1>
-            <p>Samayapuram Mariamman Temple</p>
-            <div class="spinner"></div>
-        </div>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="temple-icon">🏛️</div>
+        <div class="loading-text">சமயபுரம் மாரியம்மன் கோயில்</div>
+        <div class="loading-text">டிஜிடல் ஆராதனை</div>
+        <div class="loading-spinner"></div>
     </div>
 
     <!-- Main Container -->
-    <div class="container">
+    <div id="mainContainer">
         <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="header-ad">
-                    <img src="https://images.unsplash.com/photo-1589519160732-57fc498494f8?w=200&h=200&fit=crop" alt="Advertisement">
-                </div>
-                <div class="header-title">
-                    <h1>🙏 Digital Aarti 🙏</h1>
-                    <p>Samayapuram Mariamman Temple, Tiruchirappalli</p>
-                </div>
+        <div class="header">
+            <div class="ad-space-header">
+                <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=100&h=100&fit=crop" alt="விளம்பரம்">
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Instructions Modal -->
-            <div id="instructionsModal" class="modal active">
-                <div class="modal-content slide-up">
-                    <h2>🙏 Welcome 🙏</h2>
-                    <p>Please read the following instructions carefully:</p>
-                    <ul>
-                        <li>Keep your image within the <span style="color: #00ff00;">green box</span></li>
-                        <li>Ensure proper lighting and clear visibility</li>
-                        <li>Hold your device steady during the aarti</li>
-                        <li>Complete each ritual step in order</li>
-                        <li>Each ritual can be performed only once</li>
-                        <li>Maintain the image in the green box throughout</li>
-                        <li>Do not leave the application during the process</li>
-                        <li>After completion, you'll receive blessings in the final PDF</li>
-                    </ul>
-                    <p style="color: #d4af37; font-weight: bold; margin-top: 20px;">May the divine blessings be with you 🙏</p>
-                    <div class="button-group">
-                        <button class="btn-primary" onclick="startAarti()">I Understand - Start Aarti</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Camera Section -->
-            <div class="camera-section" id="cameraSection">
-                <video id="cameraFeed" autoplay playsinline muted></video>
-                <div class="instruction-overlay">
-                    <p>📸 Keep image in the green box 📸</p>
-                </div>
-                <div class="camera-overlay">
-                    <div class="green-box"></div>
-                </div>
-            </div>
-
-            <!-- Start Button -->
-            <div id="startButtonContainer" style="display: none; text-align: center; margin-bottom: 15px;">
-                <button class="btn-primary" onclick="beginRituals()" style="width: 100%; padding: 15px; font-size: 16px;">
-                    ✨ START AARTI ✨
-                </button>
-            </div>
-
-            <!-- Rituals Section -->
-            <div class="rituals-section" id="ritualsSection">
-                <div class="ritual-instruction">
-                    <p>Click each ritual circle to perform the sacred rites</p>
-                </div>
-                <div class="rituals-grid">
-                    <div class="ritual-circle" data-ritual="sambrani" onclick="performRitual(this)">
-                        <div class="checkmark">✓</div>
-                        <div style="font-size: 32px;">🌫️</div>
-                        <div class="ritual-name">Sambrani</div>
-                    </div>
-                    <div class="ritual-circle" data-ritual="arthi" onclick="performRitual(this)">
-                        <div class="checkmark">✓</div>
-                        <div style="font-size: 32px;">🔥</div>
-                        <div class="ritual-name">Arthi</div>
-                    </div>
-                    <div class="ritual-circle" data-ritual="pooabishekam" onclick="performRitual(this)">
-                        <div class="checkmark">✓</div>
-                        <div style="font-size: 32px;">💧</div>
-                        <div class="ritual-name">Pooabishekam</div>
-                    </div>
-                    <div class="ritual-circle" data-ritual="samaram" onclick="performRitual(this)">
-                        <div class="checkmark">✓</div>
-                        <div style="font-size: 32px;">🥁</div>
-                        <div class="ritual-name">Samaram</div>
-                    </div>
-                    <div class="ritual-circle" data-ritual="karpoora-arthi" onclick="performRitual(this)">
-                        <div class="checkmark">✓</div>
-                        <div style="font-size: 32px;">🕯️</div>
-                        <div class="ritual-name">Karpoora Arthi</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sarvalangaram Section -->
-            <div class="sarvalangaram-section" id="sarvalangaramSection">
-                <h2 style="color: #d4af37; margin-bottom: 10px;">✨ Sarvalangaram ✨</h2>
-                <div class="sarvalangaram-overlay">
-                    <video id="sarvalangaramVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
-                    <img id="sarvalangaramImage" src="" alt="Sarvalangaram" class="sarvalangaram-image" style="display: none;">
-                </div>
-                <p class="sarvalangaram-text">Divine adornments and final blessings 🙏</p>
-            </div>
-
-            <!-- PDF Section -->
-            <div class="pdf-section" id="pdfSection">
-                <h2 style="color: #d4af37; text-align: center; margin-bottom: 10px;">🙏 Final Blessings 🙏</h2>
-                <div class="pdf-container">
-                    <iframe id="pdfViewer" src=""></iframe>
-                </div>
+            <h1>சமயபுரம் மாரியம்மன் கோயில் - திருச்சிராப்பள்ளி</h1>
+            <div class="ad-space-header">
+                <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=100&h=100&fit=crop" alt="விளம்பரம்">
             </div>
         </div>
 
+        <!-- Camera Section -->
+        <div class="camera-container">
+            <canvas id="cameraCanvas" width="1920" height="1080"></canvas>
+            <video id="cameraFeed" autoplay playsinline muted></video>
+
+            <div class="instruction-overlay">
+                📸 உங்கள் முகம் பச்சை பெட்டிக்குள் இருக்க வேண்டும்
+            </div>
+
+            <div class="green-box-container"></div>
+
+            <!-- Canvas for animations -->
+            <canvas id="ritualCanvas" class="animation-canvas"></canvas>
+
+            <!-- Ritual Controls -->
+            <div class="ritual-controls">
+                <button class="ritual-btn" id="sambraniBtn" title="சம்பிரணி" data-ritual="sambrani">🌫️</button>
+                <button class="ritual-btn" id="arthiBtn" title="ஆரதி" data-ritual="arthi">🔥</button>
+                <button class="ritual-btn" id="pooBtn" title="பூஜாபிஷேகம்" data-ritual="poo">💧</button>
+                <button class="ritual-btn" id="samaramBtn" title="சமரம்" data-ritual="samaram">🥁</button>
+                <button class="ritual-btn" id="karpooriBtn" title="கற்பூர ஆரதி" data-ritual="karpoori">🕯️</button>
+            </div>
+        </div>
+
+        <!-- Start Button -->
+        <div class="start-button-container">
+            <button id="startBtn">ஆராதனை தொடங்க - தொடங்கவும்</button>
+        </div>
+
         <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-ad">
-                <img src="https://images.unsplash.com/photo-1589519160732-57fc498494f8?w=400&h=100&fit=crop" alt="Advertisement">
+        <div class="footer">
+            <div class="ad-space-footer">
+                <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=100&h=100&fit=crop" alt="விளம்பரம்">
             </div>
-            <div>
-                <p>© 2024 Deccaanow Corp. All rights reserved.</p>
-                <p style="font-size: 11px; color: #999; margin-top: 5px;">Samayapuram Mariamman Temple, Tiruchirappalli</p>
+            <div class="footer-text">
+                © 2024 Deccanow Corp - சமயபுரம் மாரியம்மன் கோயில், திருச்சிராப்பள்ளி
             </div>
-        </footer>
+            <div class="ad-space-footer">
+                <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=100&h=100&fit=crop" alt="விளம்பரம்">
+            </div>
+        </div>
+    </div>
+
+    <!-- Sarvalangaram Screen -->
+    <div class="sarvalangaram-screen" id="sarvalangaramScreen">
+        <div class="sarvalangaram-title">சர்வாலങ்கரம்</div>
+        <div class="sarvalangaram-content">
+            <img id="sarvalangaramImage" src="" alt="சர்வாலங ரம்" style="display: none;">
+            <video id="sarvalangaramVideo" style="display: none;" autoplay playsinline></video>
+        </div>
+    </div>
+
+    <!-- PDF Screen -->
+    <div class="pdf-screen" id="pdfScreen">
+        <div class="pdf-header">
+            <h2>ஆசிர்வாதம் - சுபமனை</h2>
+        </div>
+        <div class="pdf-container">
+            <div class="pdf-content" id="pdfContent">
+                <h3>🙏 தெய்வ அருளை பெற்றீர்கள்</h3>
+                <p>
+                    உங்கள் ஆராதனையை பூர்த்தி செய்துவிட்டீர்கள். மாரியம்மன் தேவியின் ஆசிர்வாதம் உங்கள் மீது இருப்பதாக வாழ்த்துகிறோம்.
+                </p>
+                <p>
+                    "அன்பு செய்க, இறைவனை நினையுங்கள், மற்றவரின் நலனை விரும்புங்கள்" என்பதே உண்மையான ஆராதனையின் அர்த்தம்.
+                </p>
+                <p style="margin-top: 20px; font-style: italic; color: #8b0000;">
+                    "கோயிலுக்குள் உள்ள கடவுள் நம் மனதுக்குள் உள்ள தெய்வமாக மாறும்போது, வாழ்க்கை பூர்ணமாகிறது."
+                </p>
+                <button class="completion-button" id="completeBtn">ஆரதனை முடிந்தது</button>
+            </div>
+        </div>
     </div>
 
     <script>
         // Device Detection
         function isMobileOrTablet() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const mobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
-            const screenWidth = window.innerWidth;
-            const isSmallScreen = screenWidth < 1200;
-            return mobile || isSmallScreen;
+            const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+            const isTouch = () => {
+                return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+            };
+            return mobileRegex.test(userAgent.toLowerCase()) || isTouch();
         }
 
-        // Check device on load
-        window.addEventListener('load', () => {
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
             if (!isMobileOrTablet()) {
-                document.querySelector('.container').style.display = 'none';
-                document.getElementById('desktopOnly').style.display = 'flex';
+                document.body.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #d4af37; font-size: 24px; text-align: center; padding: 20px;">இந்த பயன்பாடு மொபைல் மற்றும் டேபிளெட்டுகளுக்காக மட்டுமே பயன்படுத்த பயன்படுகிறது</div>';
+                return;
             }
+
+            // Prevent screen lock
+            if ('wakeLock' in navigator) {
+                try {
+                    await navigator.wakeLock.request('screen');
+                } catch (err) {
+                    console.log('Wake lock error:', err);
+                }
+            }
+
+            // Start loading animation
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                initializeCamera();
+            }, 2000);
         });
 
-        // State Management
-        const state = {
-            ritualsCompleted: new Set(),
-            allRitualsComplete: false,
-            audioPlaying: false,
-            currentStep: 'instructions'
+        // Ritual State
+        const ritualState = {
+            started: false,
+            completed: {
+                sambrani: false,
+                arthi: false,
+                poo: false,
+                samaram: false,
+                karpoori: false
+            },
+            ritual: null,
+            playing: false
         };
 
-        // Get Camera Access
-        async function getCameraAccess() {
+        // Camera Initialization
+        async function initializeCamera() {
             try {
+                const video = document.getElementById('cameraFeed');
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'user',
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
-                    },
+                    video: { facingMode: 'environment' },
                     audio: false
                 });
-                document.getElementById('cameraFeed').srcObject = stream;
-                return true;
+                video.srcObject = stream;
+                video.onloadedmetadata = () => {
+                    video.play();
+                };
             } catch (error) {
-                console.error('Camera access denied:', error);
-                alert('Please allow camera access to proceed with the aarti');
-                return false;
+                console.error('Camera error:', error);
+                showNotification('📷 ক্যামেরার অনুমতি প্রয়োজন');
+                initializeCamera();
             }
         }
 
-        // Start Aarti
-        async function startAarti() {
-            document.getElementById('instructionsModal').classList.remove('active');
-            const cameraSection = document.getElementById('cameraSection');
-            cameraSection.classList.add('active');
-            
-            const hasCamera = await getCameraAccess();
-            if (!hasCamera) {
-                document.getElementById('instructionsModal').classList.add('active');
-                return;
+        // Start Button
+        document.getElementById('startBtn').addEventListener('click', () => {
+            ritualState.started = true;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('startBtn').textContent = 'ঋতু শুরু হয়েছে - সমস্ত পূজা করুন';
+            showNotification('🙏 আপনার পূজা শুরু করুন');
+        });
+
+        // Ritual Buttons
+        document.querySelectorAll('.ritual-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                if (!ritualState.started) {
+                    showNotification('প্রথমে শুরু করুন বাটন ক্লিক করুন');
+                    return;
+                }
+
+                const ritual = this.dataset.ritual;
+                if (ritualState.completed[ritual]) {
+                    showNotification('এই পূজা ইতিমধ্যে সম্পন্ন হয়েছে');
+                    return;
+                }
+
+                ritualState.completed[ritual] = true;
+                this.classList.add('completed');
+                this.disabled = true;
+
+                await performRitual(ritual);
+                checkAllRitualsComplete();
+            });
+        });
+
+        // Perform Ritual Animations
+        async function performRitual(ritual) {
+            const canvas = document.getElementById('ritualCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Play background music
+            playRitualAudio(ritual);
+
+            switch(ritual) {
+                case 'sambrani':
+                    await performSambrani(canvas, ctx);
+                    break;
+                case 'arthi':
+                    await performArthi(canvas, ctx);
+                    break;
+                case 'poo':
+                    await performPoo(canvas, ctx);
+                    break;
+                case 'samaram':
+                    await performSamaram(canvas, ctx);
+                    break;
+                case 'karpoori':
+                    await performKarpoori(canvas, ctx);
+                    break;
             }
 
-            // Show start button after camera loads
-            setTimeout(() => {
-                document.getElementById('startButtonContainer').style.display = 'block';
-            }, 2000);
+            showNotification(`✓ ${ritual} সম্পূর্ণ হয়েছে`);
         }
 
-        // Begin Rituals
-        function beginRituals() {
-            document.getElementById('startButtonContainer').style.display = 'none';
-            document.getElementById('cameraSection').style.display = 'none';
-            document.getElementById('ritualsSection').classList.add('active');
-            state.currentStep = 'rituals';
-        }
-
-        // Perform Ritual
-        function performRitual(element) {
-            const ritualName = element.getAttribute('data-ritual');
+        // Sambrani Animation
+        async function performSambrani(canvas, ctx) {
+            showNotification('🌫️ সম্বিরণি ধূপ সম্পূর্ণ হচ্ছে...');
             
-            // Check if already completed
-            if (state.ritualsCompleted.has(ritualName)) {
-                return;
+            const particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: -Math.random() * 3,
+                    opacity: 1,
+                    radius: Math.random() * 30 + 20
+                });
             }
 
-            // Mark as completed
-            state.ritualsCompleted.add(ritualName);
-            element.classList.add('completed');
-            
-            // Play ritual sound effect (using Web Audio API)
-            playRitualSound();
-            
-            // Show notification
-            showNotification(`${ritualName} completed! 🙏`);
+            return new Promise(resolve => {
+                let frame = 0;
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Check if all rituals are complete
-            if (state.ritualsCompleted.size === 5) {
-                state.allRitualsComplete = true;
+                    particles.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy -= 0.1;
+                        p.opacity -= 0.01;
+
+                        ctx.fillStyle = `rgba(200, 200, 200, ${p.opacity * 0.6})`;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+
+                    frame++;
+                    if (frame < 200) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        resolve();
+                    }
+                };
+                animate();
+            });
+        }
+
+        // Arthi Animation
+        async function performArthi(canvas, ctx) {
+            showNotification('🔥 আরতি সম্পূর্ণ হচ্ছে...');
+            
+            const lampX = canvas.width / 2;
+            const lampY = canvas.height / 3;
+
+            return new Promise(resolve => {
+                let frame = 0;
+                const totalFrames = 180;
+
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // Draw lamp
+                    ctx.fillStyle = 'rgba(255, 215, 0, 0.9)';
+                    ctx.beginPath();
+                    ctx.arc(lampX, lampY, 30, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Draw flame
+                    const flameHeight = 40 + Math.sin(frame * 0.1) * 5;
+                    const gradient = ctx.createLinearGradient(lampX, lampY - 30, lampX, lampY - 30 - flameHeight);
+                    gradient.addColorStop(0, 'rgba(255, 100, 0, 0)');
+                    gradient.addColorStop(0.5, 'rgba(255, 150, 0, 0.8)');
+                    gradient.addColorStop(1, 'rgba(255, 215, 0, 1)');
+
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.moveTo(lampX - 20, lampY - 30);
+                    ctx.lineTo(lampX + 20, lampY - 30);
+                    ctx.lineTo(lampX + 10 + Math.sin(frame * 0.2) * 3, lampY - 30 - flameHeight);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    frame++;
+                    if (frame < totalFrames) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        resolve();
+                    }
+                };
+                animate();
+            });
+        }
+
+        // Poobishekam Animation (Flowers falling)
+        async function performPoo(canvas, ctx) {
+            showNotification('💧 பூஜாபிஷேகம் சম্পূর্ণ হচ্ছে...');
+            
+            const flowers = [];
+            for (let i = 0; i < 30; i++) {
+                flowers.push({
+                    x: Math.random() * canvas.width,
+                    y: -Math.random() * 100,
+                    vy: Math.random() * 2 + 1,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: Math.random() * 0.1 - 0.05
+                });
+            }
+
+            return new Promise(resolve => {
+                let frame = 0;
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    flowers.forEach((f, i) => {
+                        if (f.y < canvas.height + 50) {
+                            f.y += f.vy;
+                            f.rotation += f.rotationSpeed;
+
+                            ctx.save();
+                            ctx.translate(f.x, f.y);
+                            ctx.rotate(f.rotation);
+
+                            ctx.fillStyle = 'rgba(255, 69, 0, 0.8)';
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 10, 0, Math.PI * 2);
+                            ctx.fill();
+
+                            ctx.fillStyle = 'rgba(255, 20, 147, 0.9)';
+                            for (let j = 0; j < 5; j++) {
+                                ctx.beginPath();
+                                ctx.arc(
+                                    Math.cos(j * Math.PI * 2 / 5) * 15,
+                                    Math.sin(j * Math.PI * 2 / 5) * 15,
+                                    6,
+                                    0,
+                                    Math.PI * 2
+                                );
+                                ctx.fill();
+                            }
+
+                            ctx.restore();
+                        }
+                    });
+
+                    frame++;
+                    if (frame < 300) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        resolve();
+                    }
+                };
+                animate();
+            });
+        }
+
+        // Samaram Animation (Fans)
+        async function performSamaram(canvas, ctx) {
+            showNotification('🥁 சமரம் சম্পূর্ণ হচ্ছে...');
+            
+            return new Promise(resolve => {
+                let frame = 0;
+                const totalFrames = 180;
+
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+
+                    // Left Fan
+                    ctx.save();
+                    ctx.translate(100, centerY);
+                    ctx.rotate(frame * 0.1);
+
+                    ctx.fillStyle = 'rgba(139, 69, 19, 0.9)';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 40, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = 'rgba(160, 82, 45, 0.7)';
+                    ctx.fillRect(-15, -35, 30, 25);
+                    ctx.fillRect(-15, 10, 30, 25);
+
+                    ctx.restore();
+
+                    // Right Fan
+                    ctx.save();
+                    ctx.translate(canvas.width - 100, centerY);
+                    ctx.rotate(-frame * 0.1);
+
+                    ctx.fillStyle = 'rgba(139, 69, 19, 0.9)';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 40, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = 'rgba(160, 82, 45, 0.7)';
+                    ctx.fillRect(-15, -35, 30, 25);
+                    ctx.fillRect(-15, 10, 30, 25);
+
+                    ctx.restore();
+
+                    frame++;
+                    if (frame < totalFrames) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        resolve();
+                    }
+                };
+                animate();
+            });
+        }
+
+        // Karpoora Arthi Animation (Camphor Flame)
+        async function performKarpoori(canvas, ctx) {
+            showNotification('🕯️ கற்பூர ஆரதி சম்পূர্ণ হচ্ছে...');
+            
+            return new Promise(resolve => {
+                let totalFrame = 0;
+                const nadCount = 3;
+                let currentNad = 0;
+                const framesPerNad = 120;
+
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    const frameInNad = totalFrame % framesPerNad;
+                    const camphorX = canvas.width / 2;
+                    const camphorY = canvas.height / 2;
+
+                    // Draw camphor flame
+                    const flameHeight = 60 + Math.sin(frameInNad * 0.05) * 10;
+
+                    const gradient = ctx.createLinearGradient(camphorX, camphorY, camphorX, camphorY - flameHeight);
+                    gradient.addColorStop(0, 'rgba(255, 215, 0, 1)');
+                    gradient.addColorStop(0.5, 'rgba(255, 100, 0, 0.8)');
+                    gradient.addColorStop(1, 'rgba(255, 50, 0, 0)');
+
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.moveTo(camphorX - 25, camphorY);
+                    ctx.lineTo(camphorX + 25, camphorY);
+                    ctx.lineTo(camphorX + 10 + Math.sin(frameInNad * 0.1) * 5, camphorY - flameHeight);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // Draw camphor base
+                    ctx.fillStyle = 'rgba(200, 200, 200, 0.8)';
+                    ctx.beginPath();
+                    ctx.arc(camphorX, camphorY, 20, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Draw light glow
+                    ctx.strokeStyle = `rgba(255, 215, 0, ${0.5 - frameInNad / (framesPerNad * 2)})`;
+                    ctx.lineWidth = 5;
+                    ctx.beginPath();
+                    ctx.arc(camphorX, camphorY, 100 + frameInNad / 2, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    totalFrame++;
+                    if (totalFrame < nadCount * framesPerNad) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        resolve();
+                    }
+                };
+                animate();
+            });
+        }
+
+        // Play Ritual Audio
+        function playRitualAudio(ritual) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            oscillator.connect(gain);
+            gain.connect(audioContext.destination);
+
+            const frequencies = {
+                sambrani: 285.5,
+                arthi: 324.0,
+                poo: 370.0,
+                samaram: 444.0,
+                karpoori: 528.0
+            };
+
+            oscillator.frequency.value = frequencies[ritual] || 432;
+            gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1);
+        }
+
+        // Check All Rituals Complete
+        function checkAllRitualsComplete() {
+            const allComplete = Object.values(ritualState.completed).every(v => v === true);
+            if (allComplete) {
+                showNotification('🎉 அனைத்து பூஜையும் முடிந்துவிட்டது!');
                 setTimeout(() => {
                     showSarvalangaram();
-                }, 1500);
+                }, 1000);
             }
         }
 
         // Show Sarvalangaram
         function showSarvalangaram() {
-            document.getElementById('ritualsSection').classList.remove('active');
-            document.getElementById('sarvalangaramSection').classList.add('active');
-            
-            // Play background audio
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('sarvalangaramScreen').classList.add('active');
+
             playBackgroundAudio();
-            
-            // Display GIF/Video (using placeholder)
-            const videoElement = document.getElementById('sarvalangaramVideo');
-            const imageElement = document.getElementById('sarvalangaramImage');
-            
-            // For now, showing a color animation. Replace with actual GIF URL
-            videoElement.style.background = 'linear-gradient(45deg, #d4af37, #f5d966, #d4af37)';
-            videoElement.style.animation = 'pulse 2s infinite';
-            
-            // You can set actual GIF URL here:
-            // imageElement.src = 'path-to-your-gif.gif';
-            // imageElement.style.display = 'block';
-            
+
+            // Set video/image source (update with your GIF/PNG/Video)
+            // For now using placeholder
+            const sarvaVideo = document.getElementById('sarvalangaramVideo');
+            sarvaVideo.style.display = 'block';
+
             setTimeout(() => {
-                showFinalBlessings();
-            }, 8000);
+                showPDFScreen();
+            }, 5000);
         }
 
-        // Show Final Blessings (PDF)
-        function showFinalBlessings() {
-            document.getElementById('sarvalangaramSection').classList.remove('active');
-            document.getElementById('pdfSection').classList.add('active');
-            
-            // Set PDF URL here - Replace with your actual PDF
-            document.getElementById('pdfViewer').src = 'data:application/pdf,%25PDF-1.4%0A1%200%20obj%0A%3C%3C%2FType%2F%20Catalog%2F%20Pages%202%200%20R%3E%3E%0Aendobj%0A2%200%20obj%0A%3C%3C%2FType%2F%20Pages%2F%20Kids%20%5B3%200%20R%5D%2F%20Count%201%3E%3E%0Aendobj%0A3%200%20obj%0A%3C%3C%2FType%2F%20Page%2F%20Parent%202%200%20R%2F%20MediaBox%20%5B0%200%20612%20792%5D%2F%20Contents%204%200%20R%2F%20Resources%3C%3C%2FFont%3C%3C%2FF1%205%200%20R%3E%3E%3E%3E%3E%3E%0Aendobj%0A4%200%20obj%0A%3C%3C%2FLength%20200%3E%3E%0Astream%0ABT%0A%2FF1%2024%20Tf%0A50%20700%20Td%0A(Divine%20Blessings)%20Tj%0AET%0Aendstream%0Aendobj%0A5%200%20obj%0A%3C%3C%2FType%2F%20Font%2F%20Subtype%2F%20Type1%2F%20BaseFont%2F%20Helvetica%3E%3E%0Aendobj%0Axref%0A0%205%0A0000000000%2065535%20f%0A0000000009%2000000%20n%0A0000000058%2000000%20n%0A0000000115%2000000%20n%0A0000000317%2000000%20n%0A0000000566%2000000%20n%0Atrailer%0A%3C%3C%2FSize%206%2F%20Root%201%200%20R%3E%3E%0Astartxref%0A657%0A%25%25EOF';
-            
-            // Stop background audio
-            stopBackgroundAudio();
-            
-            showNotification('May the blessings of the divine be with you! 🙏');
-        }
-
-        // Audio Functions
-        function playRitualSound() {
+        // Play Background Audio for Sarvalangaram
+        function playBackgroundAudio() {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
-            
+            const oscillator = audioContext.createOscillator();
+            const lfo = audioContext.createOscillator();
+
             oscillator.connect(gainNode);
             gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 528; // Healing frequency
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
+            lfo.connect(oscillator.frequency);
+
+            oscillator.frequency.value = 432;
+            lfo.frequency.value = 2;
+            gainNode.gain.value = 0.05;
+
+            oscillator.start();
+            lfo.start();
         }
 
-        function playBackgroundAudio() {
-            // Create a simple background music using Web Audio API
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            function playNote(freq, duration) {
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-                
-                osc.frequency.value = freq;
-                osc.type = 'sine';
-                gain.gain.setValueAtTime(0.2, audioContext.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-                
-                osc.start(audioContext.currentTime);
-                osc.stop(audioContext.currentTime + duration);
-            }
-            
-            // Play a divine chord sequence
-            const now = audioContext.currentTime;
-            playNote(432, 1); // A note (divine frequency)
-            playNote(528, 1); // C# note
-            playNote(640, 1); // E note
+        // Show PDF Screen
+        function showPDFScreen() {
+            document.getElementById('sarvalangaramScreen').classList.remove('active');
+            document.getElementById('pdfScreen').classList.add('active');
         }
 
-        function stopBackgroundAudio() {
-            // Audio stops automatically
-        }
+        // Complete Button
+        document.getElementById('completeBtn')?.addEventListener('click', () => {
+            location.reload();
+        });
 
-        // Notification System
+        // Notification
         function showNotification(message) {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #d4af37 0%, #f5d966 100%);
-                color: #8b0000;
-                padding: 15px 25px;
-                border-radius: 8px;
-                font-weight: bold;
-                z-index: 500;
-                animation: slideUp 0.3s ease-out;
-                box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
-                max-width: 80vw;
-                text-align: center;
-            `;
+            notification.className = 'notification';
             notification.textContent = message;
             document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'fadeOut 0.3s ease-out';
-                setTimeout(() => notification.remove(), 300);
-            }, 2000);
+
+            setTimeout(() => notification.remove(), 3000);
         }
 
-        // Prevent leaving during aarti
+        // Prevent accidental page exit
         window.addEventListener('beforeunload', (e) => {
-            if (state.currentStep !== 'instructions') {
+            if (ritualState.started && !document.getElementById('pdfScreen').classList.contains('active')) {
                 e.preventDefault();
                 e.returnValue = '';
             }
         });
 
-        // Handle orientation change
-        window.addEventListener('orientationchange', () => {
-            const cameraSection = document.getElementById('cameraSection');
-            if (cameraSection.classList.contains('active')) {
-                const video = document.getElementById('cameraFeed');
-                video.style.transform = 'scaleX(-1)';
-            }
-        });
-
-        // Prevent pinch zoom
-        document.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        // Request full screen capability
-        function requestFullScreen() {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            }
-        }
-
-        // Initialize on device ready
-        document.addEventListener('DOMContentLoaded', () => {
-            // Request full screen for immersive experience
-            setTimeout(() => {
-                if (window.innerHeight === window.screen.height) {
-                    // Already full screen or can't request
-                }
-            }, 1000);
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('ritualCanvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
     </script>
 </body>

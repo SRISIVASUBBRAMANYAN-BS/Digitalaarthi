@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Virtual Darshan - Samyapuram Temple</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samyapuram Mariamman Temple - Digital Darshan</title>
     <style>
         * {
             margin: 0;
@@ -11,1193 +11,826 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #8B4513;
-            --secondary: #D4A574;
-            --accent: #FFD700;
-            --white: #FFFFFF;
-            --dark: #2C2C2C;
-            --light-bg: #FFF8F0;
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0;
-            margin: 0;
             overflow: hidden;
         }
 
         .container {
             width: 100%;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
             max-width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: var(--light-bg);
-            z-index: 1;
-            padding-top: max(0px, env(safe-area-inset-top));
-            padding-bottom: max(0px, env(safe-area-inset-bottom));
-        }
-
-        /* Top Ad Section */
-        .ad-top {
-            width: 100%;
-            height: 60px;
-            background: var(--primary);
             display: flex;
-            align-items: center;
             justify-content: center;
-            overflow: hidden;
-            border-bottom: 2px solid var(--accent);
+            align-items: center;
         }
 
-        .ad-top img {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
+        /* Language Selection Screen */
+        .language-selection {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Screen Container */
-        .screen-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            gap: 40px;
             padding: 20px;
-            overflow: hidden;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        .screen {
+        .language-selection.hidden {
+            display: none;
+        }
+
+        .temple-title {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        .temple-subtitle {
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            margin-bottom: 40px;
+        }
+
+        .language-buttons {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .language-btn {
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            min-width: 150px;
+        }
+
+        .language-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .language-btn:active {
+            transform: translateY(-2px);
+        }
+
+        /* Camera Screen */
+        .camera-screen {
             display: none;
             width: 100%;
             height: 100%;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            gap: 20px;
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        /* Welcome Screen */
-        #welcomeScreen {
-            background: linear-gradient(180deg, rgba(139, 69, 19, 0.1) 0%, rgba(212, 165, 116, 0.1) 100%);
-        }
-
-        .welcome-image {
-            max-width: 90%;
-            max-height: 50%;
-            object-fit: contain;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-        }
-
-        .language-selection {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .lang-btn {
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: var(--primary);
-            color: var(--white);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .lang-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Camera Screen */
-        #cameraScreen {
-            padding: 0;
+            align-items: center;
             background: #000;
             position: relative;
         }
 
-        .camera-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+        .camera-screen.active {
+            display: flex;
         }
 
-        #camera {
+        .camera-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        video#camera {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
-        }
-
-        .camera-overlay {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5;
         }
 
         .white-box {
-            width: 90%;
-            max-width: 400px;
-            aspect-ratio: 3/4;
-            border: 4px solid var(--white);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5), inset 0 0 30px rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ritual-content {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: 4px solid white;
+            background: rgba(255, 255, 255, 0.05);
             z-index: 10;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
 
-        .gif-display {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: var(--white);
-            border-radius: 12px;
-        }
-
-        .video-display {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: var(--dark);
-            border-radius: 12px;
-        }
-
-        .image-display {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: var(--white);
-            border-radius: 12px;
-        }
-
-        .flower-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: var(--white);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .flower {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background-size: cover;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Ritual Controls */
-        .ritual-controls {
-            position: absolute;
-            bottom: 80px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            gap: 10px;
-            padding: 0 20px;
-            z-index: 20;
-            flex-wrap: wrap;
-        }
-
-        .ritual-btn {
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: var(--primary);
-            color: var(--white);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            min-width: 120px;
-        }
-
-        .ritual-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: #999;
-        }
-
-        .ritual-btn.active {
-            background: var(--accent);
-            color: var(--dark);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-
-        .ritual-btn.blink {
-            animation: blink 0.6s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Popup */
-        .popup {
+        .instruction-popup {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: var(--white);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            z-index: 1000;
+            max-width: 80%;
             text-align: center;
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            gap: 20px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffd700;
             animation: popupIn 0.3s ease;
         }
 
         @keyframes popupIn {
             from {
-                transform: translate(-50%, -50%) scale(0.5);
                 opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
             }
             to {
-                transform: translate(-50%, -50%) scale(1);
                 opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
             }
         }
 
-        .popup.active {
-            display: flex;
-        }
-
-        .popup-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .popup-text {
-            font-size: 16px;
-            color: var(--dark);
-            line-height: 1.5;
-        }
-
-        .popup-btn {
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary);
-            color: var(--white);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .popup-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Completion Screen */
-        #completionScreen {
-            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
-        }
-
-        .completion-message {
-            color: var(--white);
-            text-align: center;
-            font-size: 18px;
-            line-height: 1.6;
-            max-width: 90%;
-        }
-
-        .completion-message h2 {
-            font-size: 28px;
+        .instruction-popup h2 {
+            font-size: 1.8rem;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #ffd700;
         }
 
-        .completion-btn {
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            background: var(--accent);
-            color: var(--dark);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .completion-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* PDF Viewer */
-        .pdf-viewer {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            gap: 10px;
-        }
-
-        .pdf-controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .pdf-btn {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary);
-            color: var(--white);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .pdf-btn:active {
-            transform: scale(0.95);
-        }
-
-        #pdfContainer {
-            flex: 1;
-            background: var(--white);
-            border-radius: 10px;
-            overflow-y: auto;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .pdf-content {
-            font-size: 14px;
+        .instruction-popup p {
+            font-size: 1.1rem;
             line-height: 1.8;
-            color: var(--dark);
+            margin-bottom: 30px;
         }
 
-        .pdf-content h1 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            text-align: center;
+        .popup-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
         }
 
-        .pdf-content h2 {
-            color: var(--secondary);
-            margin-top: 20px;
-            margin-bottom: 10px;
+        .popup-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
         }
 
-        .pdf-content p {
-            margin-bottom: 10px;
-            text-align: justify;
-        }
-
-        /* Bottom Ad Section */
-        .ad-bottom {
-            width: 100%;
-            height: 60px;
-            background: var(--primary);
+        /* Ritual Circles */
+        .ritual-circles {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            align-items: center;
+            gap: 30px;
+            z-index: 100;
+            flex-wrap: wrap;
             justify-content: center;
+        }
+
+        .ritual-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: 3px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
             overflow: hidden;
-            border-top: 2px solid var(--accent);
         }
 
-        .ad-bottom img {
-            height: 100%;
+        .ritual-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .ritual-circle.completed {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        .ritual-circle-text {
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Video Overlay */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            object-fit: cover;
+            height: 100%;
+            z-index: 50;
+            display: none;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Responsive */
-        @media (max-width: 480px) {
-            .ritual-btn {
-                padding: 10px 15px;
-                font-size: 12px;
-                min-width: 100px;
+        .video-overlay.active {
+            display: flex;
+        }
+
+        .video-overlay video {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            text-align: center;
+            color: white;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            max-width: 500px;
+            height: 600px;
+            border-radius: 10px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .modal-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        /* Thank You Screen */
+        .thankyou-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .thankyou-screen.active {
+            display: flex;
+        }
+
+        .thankyou-title {
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        .thankyou-content {
+            font-size: 1.3rem;
+            color: white;
+            line-height: 2;
+            margin-bottom: 40px;
+            max-width: 600px;
+            text-justify: inter-word;
+        }
+
+        .temple-blessing {
+            font-size: 1.1rem;
+            color: #f0f0f0;
+            font-style: italic;
+            margin: 20px 0;
+        }
+
+        .restart-button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .restart-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1500;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .temple-title {
+                font-size: 1.8rem;
             }
 
-            .popup {
+            .temple-subtitle {
+                font-size: 1rem;
+            }
+
+            .language-buttons {
+                gap: 15px;
+            }
+
+            .language-btn {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+
+            .ritual-circles {
+                bottom: 20px;
+                gap: 15px;
+            }
+
+            .ritual-circle {
+                width: 65px;
+                height: 65px;
+                font-size: 0.8rem;
+            }
+
+            .instruction-popup {
+                padding: 25px;
+                max-width: 90%;
+            }
+
+            .instruction-popup h2 {
+                font-size: 1.4rem;
+            }
+
+            .instruction-popup p {
+                font-size: 1rem;
+            }
+
+            .thankyou-title {
+                font-size: 2rem;
+            }
+
+            .thankyou-content {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .language-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .language-btn {
+                width: 100%;
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            .ritual-circles {
+                gap: 10px;
+            }
+
+            .ritual-circle {
+                width: 60px;
+                height: 60px;
+                border-width: 2px;
+            }
+
+            .instruction-popup {
                 padding: 20px;
             }
 
-            .popup-title {
-                font-size: 20px;
-            }
-
-            .popup-text {
-                font-size: 14px;
-            }
-
-            .completion-message h2 {
-                font-size: 24px;
-            }
-
-            .completion-message {
-                font-size: 16px;
-            }
-
-            .ad-top, .ad-bottom {
-                height: 50px;
+            .modal-content iframe {
+                max-width: 95vw;
+                height: 400px;
             }
         }
 
-        @media (orientation: landscape) {
-            .white-box {
-                max-width: 300px;
-                aspect-ratio: 3/4;
-            }
-
-            .ritual-controls {
-                bottom: 60px;
-            }
-        }
-
-        /* Status Text */
-        .ritual-status {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            color: var(--white);
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 20;
-            font-size: 14px;
-        }
-
-        .ritual-progress {
-            position: absolute;
-            top: 70px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            color: var(--accent);
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-align: center;
-            z-index: 20;
-            font-size: 12px;
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Top Advertisement -->
-        <div class="ad-top">
-            <img id="adTopImage" src="" alt="Advertisement" style="display: none;">
-            <div id="adTopPlaceholder" style="width: 100%; height: 100%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">Top Advertisement</div>
+    <!-- Language Selection Screen -->
+    <div class="language-selection" id="languageSelection">
+        <h1 class="temple-title" id="welcomeTitle">Welcome to Samyapuram Mariamman Temple</h1>
+        <p class="temple-subtitle" id="welcomeSubtitle">Choose Your Language / உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்</p>
+        <div class="language-buttons">
+            <button class="language-btn" onclick="selectLanguage('english')" id="englishBtn">English</button>
+            <button class="language-btn" onclick="selectLanguage('tamil')" id="tamilBtn">தமிழ்</button>
+        </div>
+    </div>
+
+    <!-- Camera Screen -->
+    <div class="camera-screen" id="cameraScreen">
+        <div class="camera-container" id="cameraContainer">
+            <video id="camera" playsinline autoplay></video>
+            <div class="white-box" id="whiteBox"></div>
+            <div class="video-overlay" id="videoOverlay"></div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="screen-container">
-                <!-- Welcome Screen -->
-                <div id="welcomeScreen" class="screen active">
-                    <img id="welcomeImage" class="welcome-image" src="" alt="Welcome">
-                    <h1 style="color: var(--primary); font-size: 24px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Virtual Darshan</h1>
-                    <p style="color: var(--dark); font-size: 16px;">Choose Language / மொழி தேர்ந்தெடுக்கவும்</p>
-                    <div class="language-selection">
-                        <button class="lang-btn" onclick="selectLanguage('english')">English</button>
-                        <button class="lang-btn" onclick="selectLanguage('tamil')">தமிழ்</button>
-                    </div>
-                </div>
-
-                <!-- Camera Screen -->
-                <div id="cameraScreen" class="screen">
-                    <div class="camera-container">
-                        <video id="camera" playsinline autoplay muted></video>
-                    </div>
-
-                    <div class="ritual-status">
-                        <span id="statusText">Ready for Darshan</span>
-                    </div>
-
-                    <div class="ritual-progress">
-                        <span id="progressText">Sambrani → Aarthi → Camphor → Pushpa → Sarva Alankaram</span>
-                    </div>
-
-                    <div class="camera-overlay">
-                        <div class="white-box">
-                            <div class="ritual-content" id="ritualContent"></div>
-                        </div>
-                    </div>
-
-                    <div class="ritual-controls">
-                        <button class="ritual-btn" id="sambraniBtn" onclick="performRitual('sambrani')">Sambrani</button>
-                        <button class="ritual-btn" id="aarthiBtn" onclick="performRitual('aarthi')" disabled>Aarthi</button>
-                        <button class="ritual-btn" id="camphorBtn" onclick="performRitual('camphor')" disabled>Camphor</button>
-                        <button class="ritual-btn" id="pushpaBtn" onclick="performRitual('pushpa')" disabled>Pushpa</button>
-                    </div>
-                </div>
-
-                <!-- Sarva Alankaram Screen -->
-                <div id="sarvaScreen" class="screen">
-                    <div class="camera-container">
-                        <video id="camera2" playsinline autoplay muted style="display: none;"></video>
-                    </div>
-
-                    <div class="camera-overlay">
-                        <div class="white-box">
-                            <div class="ritual-content" id="sarvaContent"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Completion Screen -->
-                <div id="completionScreen" class="screen">
-                    <div class="completion-message">
-                        <h2 id="completionTitle">Virtual Darshan Completed</h2>
-                        <p id="completionText">Thank you for visiting the temple.<br>Blessings upon you!</p>
-                        <button class="completion-btn" onclick="viewPDF()">View Temple Information</button>
-                    </div>
-                </div>
-
-                <!-- PDF View Screen -->
-                <div id="pdfScreen" class="screen">
-                    <div class="pdf-viewer">
-                        <div class="pdf-controls">
-                            <button class="pdf-btn" onclick="downloadPDF()">Download PDF</button>
-                            <button class="pdf-btn" onclick="goHome()">Visit Again</button>
-                        </div>
-                        <div id="pdfContainer">
-                            <div class="pdf-content" id="pdfContent"></div>
-                        </div>
-                    </div>
-                </div>
+        <div class="ritual-circles" id="ritualCircles">
+            <div class="ritual-circle" onclick="performRitual(0)" title="Sambrani">
+                <div class="ritual-circle-text" id="ritual0Text">संभ्रणी<br>Sambrani</div>
+            </div>
+            <div class="ritual-circle" onclick="performRitual(1)" title="Aarthi">
+                <div class="ritual-circle-text" id="ritual1Text">आरती<br>Aarthi</div>
+            </div>
+            <div class="ritual-circle" onclick="performRitual(2)" title="Karpooram">
+                <div class="ritual-circle-text" id="ritual2Text">कर्पूरम<br>Karpooram</div>
+            </div>
+            <div class="ritual-circle" onclick="performRitual(3)" title="Poo Abishekam">
+                <div class="ritual-circle-text" id="ritual3Text">फूल<br>Abishekam</div>
             </div>
         </div>
 
-        <!-- Bottom Advertisement -->
-        <div class="ad-bottom">
-            <img id="adBottomImage" src="" alt="Advertisement" style="display: none;">
-            <div id="adBottomPlaceholder" style="width: 100%; height: 100%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">Bottom Advertisement</div>
+        <div class="instruction-popup" id="instructionPopup" style="display: none;">
+            <h2 id="popupTitle">Align the Image</h2>
+            <p id="popupText">Please make sure the temple image fits perfectly inside the white box. This is where all the rituals will be performed.</p>
+            <button class="popup-button" onclick="closeInstructionPopup()" id="popupBtn">Got It!</button>
         </div>
     </div>
 
-    <!-- Popup -->
-    <div class="popup" id="popup">
-        <div class="popup-title" id="popupTitle"></div>
-        <div class="popup-text" id="popupText"></div>
-        <button class="popup-btn" onclick="closePopup()">Proceed</button>
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content" id="modalContent"></div>
+        <div class="modal-buttons">
+            <button class="modal-button" onclick="downloadCurrentContent()" id="downloadBtn">Download</button>
+            <button class="modal-button" onclick="nextModalStep()" id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Thank You Screen -->
+    <div class="thankyou-screen" id="thankYouScreen">
+        <h1 class="thankyou-title" id="thankYouTitle">धन्यवाद</h1>
+        <div class="thankyou-content" id="thankYouContent">
+            <p>Thank you for visiting Samyapuram Mariamman Temple.</p>
+            <p class="temple-blessing">May the divine blessings of Mariamman be with you always.</p>
+            <p>We welcome you to visit again and seek her eternal grace.</p>
+        </div>
+        <button class="restart-button" onclick="restartApplication()" id="restartBtn">Start Again</button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
     </div>
 
     <script>
-        // Configuration Object - User will set these
+        // Configuration
         const config = {
-            welcome: {
-                imageUrl: '' // User sets this
+            language: 'english',
+            ritualVideos: [], // Will be set by user - format: {ritual: number, video: File/URL, audio: File/URL}
+            finalVideo: null,
+            finalImage: null,
+            finalPDF: null,
+            whiteBoxWidth: 400,
+            whiteBoxHeight: 300
+        };
+
+        const texts = {
+            english: {
+                welcomeTitle: 'Welcome to Samyapuram Mariamman Temple',
+                welcomeSubtitle: 'Choose Your Language',
+                popupTitle: 'Align the Temple Image',
+                popupText: 'Please make sure the temple image fits perfectly inside the white box. All rituals will be performed within this sacred space.',
+                popupBtn: 'Got It!',
+                ritual0: 'Sambrani\n(Incense)',
+                ritual1: 'Aarthi\n(Lamp)',
+                ritual2: 'Karpooram\n(Camphor)',
+                ritual3: 'Poo\nAbishekam',
+                downloadBtn: 'Download',
+                nextBtn: 'Next',
+                thankYouTitle: 'Thank You',
+                thankYouContent: '<p>Thank you for visiting Samyapuram Mariamman Temple.</p><p style="font-style: italic; margin: 20px 0;">May the divine blessings of Mariamman be with you always.</p><p>We welcome you to visit again and seek her eternal grace.</p>',
+                restartBtn: 'Start Again'
             },
-            ads: {
-                topImageUrl: '',
-                bottomImageUrl: ''
-            },
-            rituals: {
-                sambrani: {
-                    gifUrl: '',
-                    audioUrl: '',
-                    nameEng: 'Sambrani (Incense)',
-                    nameTam: 'சம்பிரானி',
-                    descEng: 'Offering sacred incense smoke as a symbol of prayer rising to heaven.',
-                    descTam: 'பூஜையின் மணத்தை வெளிப்படுத்தும் பரிமாற்றம்.'
-                },
-                aarthi: {
-                    gifUrl: '',
-                    audioUrl: '',
-                    nameEng: 'Aarthi (Lamp)',
-                    nameTam: 'ஆரத்தி',
-                    descEng: 'Waving the sacred lamp in offering to the deity.',
-                    descTam: 'தெய்வத்திற்கு விளக்கை வழங்கும் பழக்கம்.'
-                },
-                camphor: {
-                    gifUrl: '',
-                    audioUrl: '',
-                    nameEng: 'Camphor (Fire)',
-                    nameTam: 'கற்பூரம்',
-                    descEng: 'Burning sacred camphor as the ultimate offering.',
-                    descTam: 'பবிஷ்ட நெய் அர்ச்சனை நிறைவு செய்தல்.'
-                },
-                flowers: {
-                    imageUrls: [], // Array of 30 flower PNG URLs
-                    audioUrl: '',
-                    nameEng: 'Flower Offering',
-                    nameTam: 'பூ வழிபாடு',
-                    descEng: 'Showering flowers upon the divine.',
-                    descTam: 'தெய்வத்துக்கு பூ கொடுக்கும் பழக்கம்.'
-                },
-                sarva: {
-                    video1Url: '',
-                    video2Url: '',
-                    audioUrl: '',
-                    nameEng: 'Sarva Alankaram (Complete Adornment)',
-                    nameTam: 'சர்வ அலங்கரணம்',
-                    descEng: 'The complete divine adornment.',
-                    descTam: 'முழு தெய்வ அலங்கரணம்.'
-                }
-            },
-            completion: {
-                imageUrl: '', // Image to download
-                pdfUrl: '' // PDF URL
-            },
-            pdfContent: {
-                english: `
-                    <h1>Samyapuram Temple</h1>
-                    <h2>History</h2>
-                    <p>Samyapuram Temple, located in the town of Samyapuram in the Tiruvannamalai district of Tamil Nadu, is one of the oldest and most revered temples dedicated to Lord Markandeya. The temple is believed to have been constructed during the Chola dynasty period.</p>
-                    
-                    <h2>Significance</h2>
-                    <p>The temple is famous for its spiritual significance and attracts thousands of devotees from across the country. Lord Markandeya is believed to grant boons and blessings to those who worship with devotion.</p>
-                    
-                    <h2>Rituals</h2>
-                    <p><strong>Sambrani:</strong> The sacred incense offering represents the rise of prayers to the heavens.</p>
-                    <p><strong>Aarthi:</strong> The lamp offering symbolizes the removal of darkness and ignorance.</p>
-                    <p><strong>Camphor:</strong> The burning of camphor represents the ultimate sacrifice and purification.</p>
-                    <p><strong>Flower Offering:</strong> Flowers symbolize the beauty and fragrance of devotion.</p>
-                    <p><strong>Sarva Alankaram:</strong> The complete adornment celebrates the divine in all its glory.</p>
-                    
-                    <h2>Visiting Information</h2>
-                    <p>The temple is open daily from 5:00 AM to 9:00 PM. Devotees are requested to maintain silence and follow the temple protocols during worship.</p>
-                    
-                    <h2>Blessings</h2>
-                    <p>May the blessings of Lord Markandeya be upon you. This virtual darshan experience connects you spiritually with the divine, transcending physical boundaries.</p>
-                `,
-                tamil: `
-                    <h1>சமயபுரம் கோயில்</h1>
-                    <h2>வரலாறு</h2>
-                    <p>சமயபுரம் கோயில், தமிழ்நாட்டின் திருவண்ணாமலை மாவட்டத்தில் அமைந்துள்ளது. இது மார்கண்டேய பகவানுக்கு அர்ப்பணிக்கப்பட்ட உன்னதமான ஆலயங்களில் ஒன்றாகும். இந்த ஆலயம் சோழ காலத்தில் கட்டப்பட்டதாக நம்பப்படுகிறது.</p>
-                    
-                    <h2>முக்கியத்துவம்</h2>
-                    <p>இந்த ஆலயம் அதன் ஆன்மீக முக்கியத்துவத்துக்காக பிரசிద்ధமாகும். ஆயிரக்கணக்கான பக்தர்கள் முழு நாட்டிலிருந்து ஆலயத்தை பராமரிப்பதற்கு வருகிறார்கள்.</p>
-                    
-                    <h2>பூஜை அறிதல்</h2>
-                    <p><strong>சம்பிரானி:</strong> புனித தூப கொடுப்பு வானத்திற்கு பிரார்த்தனை உயர்த்துவதைக் குறிக்கிறது.</p>
-                    <p><strong>ஆரத்தி:</strong> விளக்கு அர்ச்சனை암్ని மற்றும் அறிவின்மையை நீக்குவதைக் குறிக்கிறது.</p>
-                    <p><strong>கற்பூரம்:</strong> பிரம்ம தற்ப்பொறுத்தம் மற்றும் சுத்திகரணத்தைக் குறிக்கிறது.</p>
-                    <p><strong>பூ வழிபாடு:</strong> பூக்கள் பக்தியின் அழகு மற்றும் நறுமணத்தைக் குறிக்கிறது.</p>
-                    <p><strong>சர்வ அலங்கரணம்:</strong> முழுமையான அலங்கரணம் தெய்வத்தை அதன் மகிமையுடன் கொண்டாடுகிறது.</p>
-                    
-                    <h2>பயணிக்கும் தகவல்</h2>
-                    <p>ஆலயம் ஒவ்வொரு நாளும் காலை 5:00 முதல் இரவு 9:00 வரை திறந்திருக்கிறது.</p>
-                    
-                    <h2>ஆசிர்வாதம்</h2>
-                    <p>மார்கண்டேய பகவানின் ஆசிர்வாதம் உங்கள் மீது பொழிந்திடும். இந்த가상 தர్శన அनुభवం உங்களை ஆன்மீகமாக தெய்வனுடன் இணைக்கிறது.</p>
-                `
+            tamil: {
+                welcomeTitle: 'சாமியപுரம் மாரியம்மன் கோயிலுக்கு வரவேற்கிறோம்',
+                welcomeSubtitle: 'உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்',
+                popupTitle: 'கோயில் படத்தை சீரமைக்கவும்',
+                popupText: 'தயவுசெய்து கோயிலின் படம் வெள்ளை பெட்டியின் உள்ளே சரியாக பொருந்தி வருவதை உறுதிசெய்யவும். அனைத்து சடங்குகளும் இந்த புனிதமான இடத்தில் நடைபெறும்.',
+                popupBtn: 'சரி!',
+                ritual0: 'சம்பிரணி\n(தூபம்)',
+                ritual1: 'ஆரத்தி\n(விளக்கு)',
+                ritual2: 'கர்பூரம்\n(கற்பூரம்)',
+                ritual3: 'பூ\nঅभिषेकம்',
+                downloadBtn: 'பதிவிறக்கு',
+                nextBtn: 'அடுத்தது',
+                thankYouTitle: 'நன்றி',
+                thankYouContent: '<p>சாமியபுரம் மாரியம்மன் கோயிலுக்கு வந்ததற்கு நன்றி.</p><p style="font-style: italic; margin: 20px 0;">மாரியம்மனின் திவ்ய ஆசீர்வாதம் எப்போதும் உங்களுடன் இருக்கட்டும்.</p><p>மீண்டும் வந்து அவளின் நித்திய கிருபையை பெற உங்களை வரவேற்கிறோம்.</p>',
+                restartBtn: 'மீண்டும் தொடங்கு'
             }
         };
 
-        // Application State
         let currentLanguage = 'english';
-        let currentRitual = 'sambrani';
-        let ritualOrder = ['sambrani', 'aarthi', 'camphor', 'flowers'];
-        let completedRituals = [];
+        let ritualStates = [false, false, false, false];
+        let allRitualsCompleted = false;
+        let currentModalStep = 'image';
         let cameraStream = null;
-        let isPopupOpen = false;
-        let ritualAudioIntervals = {};
 
-        // Set user configuration
-        function configureDarshan(userConfig) {
-            Object.assign(config, userConfig);
-            initializeAds();
-            initializeWelcome();
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            setupInitialState();
+        });
+
+        function setupInitialState() {
+            // Setup white box dimensions based on screen size
+            adjustWhiteBoxSize();
+            window.addEventListener('resize', adjustWhiteBoxSize);
         }
 
-        // Initialize advertisements
-        function initializeAds() {
-            const adTopImg = document.getElementById('adTopImage');
-            const adBottomImg = document.getElementById('adBottomImage');
-            const adTopPlaceholder = document.getElementById('adTopPlaceholder');
-            const adBottomPlaceholder = document.getElementById('adBottomPlaceholder');
-
-            if (config.ads.topImageUrl) {
-                adTopImg.src = config.ads.topImageUrl;
-                adTopImg.style.display = 'block';
-                adTopPlaceholder.style.display = 'none';
-            }
-
-            if (config.ads.bottomImageUrl) {
-                adBottomImg.src = config.ads.bottomImageUrl;
-                adBottomImg.style.display = 'block';
-                adBottomPlaceholder.style.display = 'none';
-            }
+        function selectLanguage(language) {
+            currentLanguage = language;
+            config.language = language;
+            updateUIText(language);
+            document.getElementById('languageSelection').classList.add('hidden');
+            document.getElementById('cameraScreen').classList.add('active');
+            requestCameraAccess();
         }
 
-        // Initialize welcome screen
-        function initializeWelcome() {
-            const welcomeImg = document.getElementById('welcomeImage');
-            if (config.welcome.imageUrl) {
-                welcomeImg.src = config.welcome.imageUrl;
-            }
-        }
-
-        // Select language and start darshan
-        function selectLanguage(lang) {
-            currentLanguage = lang;
-            updateLanguageText();
-            showScreen('cameraScreen');
-            initializeCamera();
-        }
-
-        // Update language text
-        function updateLanguageText() {
-            const statusText = document.getElementById('statusText');
-            const progressText = document.getElementById('progressText');
+        function updateUIText(language) {
+            const lang = texts[language];
             
-            if (currentLanguage === 'tamil') {
-                statusText.textContent = 'தர்శனத்திற்கு தயாரான';
-                progressText.textContent = 'சம்பிரானி → ஆரத்தி → கற்பூரம் → பூக்கள் → சர்வ அலங்கரணம்';
-            } else {
-                statusText.textContent = 'Ready for Darshan';
-                progressText.textContent = 'Sambrani → Aarthi → Camphor → Flowers → Sarva Alankaram';
-            }
+            document.getElementById('ritualCircles').querySelectorAll('.ritual-circle').forEach((circle, index) => {
+                const ritual = ['ritual0', 'ritual1', 'ritual2', 'ritual3'][index];
+                circle.querySelector('.ritual-circle-text').textContent = lang[ritual];
+            });
         }
 
-        // Initialize camera
-        function initializeCamera() {
-            const constraints = {
-                video: {
+        function requestCameraAccess() {
+            navigator.mediaDevices.getUserMedia({
+                video: { 
                     facingMode: 'environment',
                     width: { ideal: 1280 },
                     height: { ideal: 720 }
                 },
                 audio: false
-            };
-
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then(stream => {
-                    cameraStream = stream;
-                    const camera = document.getElementById('camera');
-                    camera.srcObject = stream;
-                    camera.play();
-                })
-                .catch(err => {
-                    console.error('Camera error:', err);
-                    alert(currentLanguage === 'tamil' ? 'கேமரா அணுக முடியவில்லை' : 'Unable to access camera');
-                });
-        }
-
-        // Perform ritual
-        function performRitual(ritual) {
-            if (completedRituals.includes(ritual)) {
-                return;
-            }
-
-            if (ritual !== ritualOrder[completedRituals.length]) {
-                showPopup(
-                    currentLanguage === 'tamil' ? 'வரிசை பிழை' : 'Order Error',
-                    currentLanguage === 'tamil' 
-                        ? 'தயவு செய்து வரிசையில் சடங்குகளைச் செய்யுங்கள்' 
-                        : 'Please perform rituals in order',
-                    true
-                );
-                return;
-            }
-
-            showPopup(
-                currentLanguage === 'tamil' 
-                    ? config.rituals[ritual].nameTam 
-                    : config.rituals[ritual].nameEng,
-                currentLanguage === 'tamil' 
-                    ? config.rituals[ritual].descTam 
-                    : config.rituals[ritual].descEng
-            );
-        }
-
-        // Show popup
-        function showPopup(title, text, isError = false) {
-            document.getElementById('popupTitle').textContent = title;
-            document.getElementById('popupText').textContent = text;
-            document.getElementById('popup').classList.add('active');
-            isPopupOpen = true;
-
-            if (!isError) {
-                setTimeout(() => {
-                    closePopup();
-                }, 3000);
-            }
-        }
-
-        // Close popup and execute ritual
-        function closePopup() {
-            if (!isPopupOpen) return;
-            document.getElementById('popup').classList.remove('active');
-            isPopupOpen = false;
-            executeCurrentRitual();
-        }
-
-        // Execute ritual
-        function executeCurrentRitual() {
-            const ritual = ritualOrder[completedRituals.length];
-            completedRituals.push(ritual);
-            
-            updateRitualUI();
-            displayRitual(ritual);
-            playRitualAudio(ritual);
-
-            if (ritual === 'flowers') {
-                setTimeout(() => {
-                    stopRitual();
-                    showSarvaAlankaram();
-                }, 5000);
-            } else {
-                setTimeout(() => {
-                    stopRitual();
-                    if (completedRituals.length < ritualOrder.length) {
-                        enableNextButton();
-                    }
-                }, 3000);
-            }
-        }
-
-        // Update ritual UI
-        function updateRitualUI() {
-            const buttons = {
-                'sambrani': document.getElementById('sambraniBtn'),
-                'aarthi': document.getElementById('aarthiBtn'),
-                'camphor': document.getElementById('camphorBtn'),
-                'flowers': document.getElementById('pushpaBtn')
-            };
-
-            for (let [key, btn] of Object.entries(buttons)) {
-                btn.classList.remove('active', 'blink');
-                if (completedRituals.includes(key)) {
-                    btn.disabled = true;
-                    btn.style.opacity = '0.5';
-                }
-            }
-
-            // Enable next button with blink
-            if (completedRituals.length < ritualOrder.length) {
-                const nextRitual = ritualOrder[completedRituals.length];
-                if (buttons[nextRitual]) {
-                    buttons[nextRitual].disabled = false;
-                    buttons[nextRitual].classList.add('blink');
-                }
-            }
-        }
-
-        // Display ritual content
-        function displayRitual(ritual) {
-            const content = document.getElementById('ritualContent');
-            content.innerHTML = '';
-
-            if (ritual === 'flowers') {
-                displayFlowers(content);
-            } else {
-                const gif = document.createElement('img');
-                gif.src = config.rituals[ritual].gifUrl;
-                gif.className = 'gif-display';
-                content.appendChild(gif);
-            }
-        }
-
-        // Display falling flowers
-        function displayFlowers(container) {
-            const flowerContainer = document.createElement('div');
-            flowerContainer.className = 'flower-container';
-            container.appendChild(flowerContainer);
-
-            const imageUrls = config.rituals.flowers.imageUrls;
-            for (let i = 0; i < 30; i++) {
-                const flower = document.createElement('div');
-                flower.className = 'flower';
-                const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-                flower.style.backgroundImage = `url('${randomImage}')`;
-                flower.style.left = Math.random() * 100 + '%';
-                flower.style.top = '-50px';
-                flower.style.animationDuration = (2 + Math.random() * 3) + 's';
-                flower.style.animationDelay = Math.random() * 2 + 's';
-                flowerContainer.appendChild(flower);
-            }
-        }
-
-        // Play ritual audio
-        function playRitualAudio(ritual) {
-            const audioUrl = config.rituals[ritual].audioUrl;
-            if (audioUrl) {
-                const audio = new Audio(audioUrl);
-                audio.play();
-
-                // Repeat every 5 seconds
-                ritualAudioIntervals[ritual] = setInterval(() => {
-                    audio.currentTime = 0;
-                    audio.play();
-                }, 5000);
-            }
-        }
-
-        // Stop ritual
-        function stopRitual() {
-            const ritual = completedRituals[completedRituals.length - 1];
-            if (ritualAudioIntervals[ritual]) {
-                clearInterval(ritualAudioIntervals[ritual]);
-            }
-
-            const content = document.getElementById('ritualContent');
-            content.innerHTML = '';
-        }
-
-        // Enable next button
-        function enableNextButton() {
-            if (completedRituals.length < ritualOrder.length) {
-                const nextRitual = ritualOrder[completedRituals.length];
-                const buttons = {
-                    'sambrani': document.getElementById('sambraniBtn'),
-                    'aarthi': document.getElementById('aarthiBtn'),
-                    'camphor': document.getElementById('camphorBtn'),
-                    'flowers': document.getElementById('pushpaBtn')
-                };
-                if (buttons[nextRitual]) {
-                    buttons[nextRitual].disabled = false;
-                    buttons[nextRitual].classList.add('blink');
-                }
-            }
-        }
-
-        // Show Sarva Alankaram
-        function showSarvaAlankaram() {
-            showScreen('sarvaScreen');
-            const sarvaContent = document.getElementById('sarvaContent');
-            sarvaContent.innerHTML = '';
-
-            // Play first video
-            const video1 = document.createElement('video');
-            video1.src = config.rituals.sarva.video1Url;
-            video1.className = 'video-display';
-            video1.autoplay = true;
-            video1.controls = false;
-            video1.muted = true;
-            sarvaContent.appendChild(video1);
-
-            // Play audio
-            const audio = new Audio(config.rituals.sarva.audioUrl);
-            audio.play();
-
-            // After first video, play second video
-            video1.onended = () => {
-                sarvaContent.innerHTML = '';
-                const video2 = document.createElement('video');
-                video2.src = config.rituals.sarva.video2Url;
-                video2.className = 'video-display';
-                video2.autoplay = true;
-                video2.controls = false;
-                video2.muted = true;
-                sarvaContent.appendChild(video2);
-
-                // After second video, show completion image
-                video2.onended = () => {
-                    showCompletionImage();
-                };
-            };
-        }
-
-        // Show completion image
-        function showCompletionImage() {
-            const sarvaContent = document.getElementById('sarvaContent');
-            sarvaContent.innerHTML = '';
-
-            const img = document.createElement('img');
-            img.src = config.completion.imageUrl;
-            img.className = 'image-display';
-            sarvaContent.appendChild(img);
-
-            // Auto-download image
-            downloadImage(config.completion.imageUrl, 'darshan-blessing.jpg');
-
-            // After 3 seconds, show completion screen
-            setTimeout(() => {
-                showCompletionMessage();
-            }, 3000);
-        }
-
-        // Download image
-        function downloadImage(url, filename) {
-            fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = filename;
-                    link.click();
-                })
-                .catch(err => console.error('Download error:', err));
-        }
-
-        // Show completion message
-        function showCompletionMessage() {
-            stopCamera();
-            showScreen('completionScreen');
-
-            if (currentLanguage === 'tamil') {
-                document.getElementById('completionTitle').textContent = 'தர்శனம் முடிந்தது';
-                document.getElementById('completionText').innerHTML = 'கோயிலுக்கு வந்ததற்கு நன்றி.<br>உங்கள் மீது ஆசிர்வாதம் பொழிந்திடும்!';
-            }
-        }
-
-        // View PDF
-        function viewPDF() {
-            showScreen('pdfScreen');
-            const content = currentLanguage === 'tamil' 
-                ? config.pdfContent.tamil 
-                : config.pdfContent.english;
-            document.getElementById('pdfContent').innerHTML = content;
-        }
-
-        // Download PDF
-        function downloadPDF() {
-            const content = currentLanguage === 'tamil' 
-                ? config.pdfContent.tamil 
-                : config.pdfContent.english;
-
-            const element = document.createElement('a');
-            const file = new Blob([content], {type: 'text/html'});
-            element.href = URL.createObjectURL(file);
-            element.download = 'temple-information.html';
-            element.click();
-
-            // Show final message
-            setTimeout(() => {
-                showFinalMessage();
-            }, 500);
-        }
-
-        // Show final message
-        function showFinalMessage() {
-            const pdfContent = document.getElementById('pdfContent');
-            pdfContent.innerHTML = `
-                <div style="text-align: center; padding: 40px 20px;">
-                    <h2 style="color: var(--primary); font-size: 24px; margin-bottom: 20px;">
-                        ${currentLanguage === 'tamil' ? 'ஆன ஆரணா முடிந়தது' : 'Virtual Darshan is Over'}
-                    </h2>
-                    <p style="color: var(--dark); font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-                        ${currentLanguage === 'tamil' 
-                            ? 'கோயிலை பார்வை செய்ததற்கு நன்றி.<br>மீண்டும் வருக. பகவான் உங்கள் மீது ஆசிர்வாதம் வழங்கட்டும்!' 
-                            : 'Thank you for visiting the temple.<br>Visit again. May the divine bless you!'}
-                    </p>
-                    <button class="pdf-btn" onclick="goHome()" style="margin-top: 30px;">
-                        ${currentLanguage === 'tamil' ? 'மீண்டும் தொடங்க' : 'Start Again'}
-                    </button>
-                </div>
-            `;
-        }
-
-        // Go home
-        function goHome() {
-            completedRituals = [];
-            ritualAudioIntervals = {};
-            showScreen('welcomeScreen');
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-                cameraStream = null;
-            }
-        }
-
-        // Stop camera
-        function stopCamera() {
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-            }
-        }
-
-        // Show screen
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
+            }).then(stream => {
+                cameraStream = stream;
+                const video = document.getElementById('camera');
+                video.srcObject = stream;
+                video.play();
+                showInstructionPopup();
+            }).catch(error => {
+                alert('Camera access denied. Please allow camera access to use this application.');
+                console.error('Camera access error:', error);
             });
-            document.getElementById(screenId).classList.add('active');
         }
 
-        // Initialize on load
-        window.addEventListener('load', () => {
-            // User should call configureDarshan() with their media URLs
-            // Example:
-            // configureDarshan({
-            //     welcome: { imageUrl: 'path/to/welcome.jpg' },
-            //     ads: { topImageUrl: 'path/to/ad-top.jpg', bottomImageUrl: 'path/to/ad-bottom.jpg' },
-            //     rituals: {
-            //         sambrani: { gifUrl: 'path/to/sambrani.gif', audioUrl: 'path/to/sambrani.mp3' },
-            //         ...
-            //     },
-            //     completion: { imageUrl: 'path/to/completion.jpg' }
-            // });
-        });
+        function showInstructionPopup() {
+            const lang = texts[currentLanguage];
+            document.getElementById('popupTitle').textContent = lang.popupTitle;
+            document.getElementById('popupText').textContent = lang.popupText;
+            document.getElementById('popupBtn').textContent = lang.popupBtn;
+            document.getElementById('instructionPopup').style.display = 'block';
+        }
 
-        // Cleanup on unload
-        window.addEventListener('beforeunload', () => {
-            stopCamera();
-            Object.values(ritualAudioIntervals).forEach(interval => clearInterval(interval));
-        });
+        function closeInstructionPopup() {
+            document.getElementById('instructionPopup').style.display = 'none';
+        }
 
-        // Handle back button on Android
-        document.addEventListener('backbutton', (e) => {
-            if (document.getElementById('welcomeScreen').classList.contains('active')) {
-                return;
+        function adjustWhiteBoxSize() {
+            const whiteBox = document.getElementById('whiteBox');
+            const container = document.getElementById('cameraContainer');
+            
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            let boxWidth, boxHeight;
+            
+            if (window.innerWidth <= 480) {
+                boxWidth = Math.min(250, containerWidth * 0.8);
+                boxHeight = (boxWidth / 4) * 3;
+            } else if (window.innerWidth <= 768) {
+                boxWidth = Math.min(300, containerWidth * 0.7);
+                boxHeight = (boxWidth / 4) * 3;
+            } else {
+                boxWidth = Math.min(400, containerWidth * 0.6);
+                boxHeight = (boxWidth / 4) * 3;
             }
-            goHome();
-            e.preventDefault();
+            
+            whiteBox.style.width = boxWidth + 'px';
+            whiteBox.style.height = boxHeight + 'px';
+            whiteBox.style.left = '50%';
+            whiteBox.style.top = '50%';
+            whiteBox.style.transform = 'translate(-50%, -50%)';
+        }
+
+        function performRitual(ritualIndex) {
+            if (ritualStates[ritualIndex]) return; // Already completed
+            
+            // For demonstration, this will trigger after user uploads video
+            // In a real app, you would have pre-configured videos
+            alert(`Ritual ${ritualIndex + 1} activated. Upload video and audio for this ritual.`);
+        }
+
+        function playRitualVideo(ritualIndex, videoSource, audioSource) {
+            const videoOverlay = document.getElementById('videoOverlay');
+            videoOverlay.innerHTML = `<video src="${videoSource}" autoplay controls style="max-width: 100%; max-height: 100%;"></video>`;
+            videoOverlay.classList.add('active');
+            
+            if (audioSource) {
+                const audio = new Audio(audioSource);
+                audio.play();
+            }
+            
+            ritualStates[ritualIndex] = true;
+            document.querySelectorAll('.ritual-circle')[ritualIndex].classList.add('completed');
+        }
+
+        function nextModalStep() {
+            const lang = texts[currentLanguage];
+            const modalContent = document.getElementById('modalContent');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentModalStep === 'image') {
+                currentModalStep = 'pdf';
+                if (config.finalPDF) {
+                    modalContent.innerHTML = `<iframe src="${config.finalPDF}" style="width: 100%; height: 600px; border-radius: 10px;"></iframe>`;
+                    nextBtn.textContent = lang.nextBtn;
+                    downloadBtn.textContent = lang.downloadBtn;
+                }
+            } else if (currentModalStep === 'pdf') {
+                document.getElementById('modalOverlay').classList.remove('active');
+                document.getElementById('thankYouScreen').classList.add('active');
+                currentModalStep = 'complete';
+            }
+        }
+
+        function downloadCurrentContent() {
+            if (currentModalStep === 'image' && config.finalImage) {
+                downloadImage(config.finalImage, 'temple-blessing.jpg');
+            } else if (currentModalStep === 'pdf' && config.finalPDF) {
+                downloadFile(config.finalPDF, 'temple-blessings.pdf');
+            }
+        }
+
+        function downloadImage(imageSrc, fileName) {
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadFile(fileSrc, fileName) {
+            const link = document.createElement('a');
+            link.href = fileSrc;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function restartApplication() {
+            location.reload();
+        }
+
+        // Sample function to set content (user would call these with actual media)
+        function setRitualContent(ritualIndex, videoURL, audioURL) {
+            config.ritualVideos[ritualIndex] = { video: videoURL, audio: audioURL };
+        }
+
+        function setFinalContent(videoURL, imageURL, pdfURL) {
+            config.finalVideo = videoURL;
+            config.finalImage = imageURL;
+            config.finalPDF = pdfURL;
+        }
+
+        function completeAllRituals() {
+            if (config.finalVideo) {
+                const videoOverlay = document.getElementById('videoOverlay');
+                videoOverlay.innerHTML = `<video src="${config.finalVideo}" autoplay style="max-width: 100%; max-height: 100%;"></video>`;
+                videoOverlay.classList.add('active');
+                
+                videoOverlay.querySelector('video').addEventListener('ended', () => {
+                    videoOverlay.classList.remove('active');
+                    showFinalImage();
+                });
+            } else {
+                showFinalImage();
+            }
+        }
+
+        function showFinalImage() {
+            if (config.finalImage) {
+                const lang = texts[currentLanguage];
+                const modalContent = document.getElementById('modalContent');
+                const downloadBtn = document.getElementById('downloadBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                
+                modalContent.innerHTML = `<img src="${config.finalImage}" alt="Temple Blessing">`;
+                downloadBtn.textContent = lang.downloadBtn;
+                nextBtn.textContent = lang.nextBtn;
+                
+                document.getElementById('modalOverlay').classList.add('active');
+                currentModalStep = 'image';
+                
+                // Auto download image
+                setTimeout(() => {
+                    downloadImage(config.finalImage, 'temple-blessing.jpg');
+                }, 1000);
+            }
+        }
+
+        // Cleanup camera on page exit
+        window.addEventListener('beforeunload', () => {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
         });
     </script>
 </body>
